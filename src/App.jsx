@@ -1,14 +1,22 @@
 import { useState } from 'react'
 import './App.css'
 
-const flowers = Array.from({ length: 13 }, (_, index) => ({
-  id: index,
-  size: 0.72 + (index % 4) * 0.12,
-  delay: `${(index % 5) * 0.42}s`,
-  duration: `${3.6 + (index % 4) * 0.5}s`,
-  left: `${5 + index * 7.3}%`,
-  bottom: `${10 + (index % 3) * 4}%`,
-}))
+const flowers = Array.from({ length: 100 }, (_, index) => {
+  const row = Math.floor(index / 20)
+  const column = index % 20
+  const isRightEdge = column >= 15
+  const sizeBase = 0.44 + ((row + column) % 6) * 0.06
+  const size = isRightEdge ? Math.max(0.18, sizeBase * 0.62) : sizeBase
+
+  return {
+    id: index,
+    size,
+    delay: `${(index % 10) * 0.16}s`,
+    duration: `${3.1 + (index % 4) * 0.35}s`,
+    left: `${2.5 + column * 4.6}%`,
+    bottom: `${8 + row * 7}%`,
+  }
+})
 
 function App() {
   const [isOpen, setIsOpen] = useState(false)
@@ -21,15 +29,19 @@ function App() {
 
       <section className="hero" aria-labelledby="page-title">
         <p className="eyebrow">21 de septiembre · Perú</p>
-        <h1 id="page-title">Un ramo de sol<br /><em>para ti</em></h1>
-        <p className="intro">Una pequeña sorpresa primaveral para la persona que hace florecer mis días.</p>
 
-        {!isOpen && (
-          <button className="enter-button" onClick={() => setIsOpen(true)}>
-            <span>Ingresar</span>
-            <strong aria-hidden="true">→</strong>
-          </button>
-        )}
+        <div className="title-row">
+          <h1 id="page-title">Un ramo de sol<br /><em>para ti</em></h1>
+
+          {!isOpen && (
+            <button className="enter-button" onClick={() => setIsOpen(true)}>
+              <span>Ingresar</span>
+              <strong aria-hidden="true">→</strong>
+            </button>
+          )}
+        </div>
+
+        <p className="intro">Una pequeña sorpresa primaveral para la persona que hace florecer mis días.</p>
 
         {isOpen && <article className="letter">
           <div className="letter-topline">
@@ -67,7 +79,7 @@ function App() {
       </section>
 
       <div className="meadow" aria-label="Un ramo de girasoles decorativos">
-        <div className="bouquet-ribbon" aria-hidden="true">para ti</div>
+        <div className="bouquet-ribbon" aria-hidden="true" />
         <div className="sun" aria-hidden="true"><span /></div>
         {flowers.map((flower) => (
           <div
@@ -91,8 +103,8 @@ function App() {
       </div>
 
       <footer>
-        <span>Hecho con luz, cariño y un campo entero de girasoles</span>
-        <strong>Software Engineer: Gabo</strong>
+        <span>Hecho con luz, cariño y un campo entero de girasoles para mi amada.</span>
+        <strong>© 2026 - Gabo, por Karlita</strong>
       </footer>
     </main>
   )
